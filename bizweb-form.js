@@ -1,4 +1,3 @@
-<script>
 $(document).ready(function() {
     // On input change in the 'Firmanavn' field
     $("#Firmanavn").on("input", async function() {
@@ -41,6 +40,14 @@ $(document).ready(function() {
                 // Update the input fields with detailed info
                 populateFields(detailedInfo);
 
+                // Populate the UTM fields and URL field
+                let urlParams = new URLSearchParams(window.location.search);
+                $('#urlField').val(window.location.href);
+                $('#utmSourceField').val(urlParams.get('utm_source') || '');
+                $('#utmMediumField').val(urlParams.get('utm_medium') || '');
+                $('#utmCampaignField').val(urlParams.get('utm_campaign') || '');
+                $('#utmContentField').val(urlParams.get('utm_content') || '');
+
                 // Hide the results
                 $("#results").hide();
             });
@@ -54,40 +61,27 @@ $(document).ready(function() {
     }
 
     function populateFields(company) {
-    $("#Firmanavn").val(company.name);
-    $("#Orgnr").val(company.companynumber);
-
-    // Visitor address details
-    if (company.visitor_address) {
-        $("#Bes-ksadresse").val(company.visitor_address.address || '');
-        $("#Bes-ksadressepoststed").val(company.visitor_address.city || '');
-        $("#Fylke").val(company.visitor_address.county || '');
-        $("#Kommune").val(company.visitor_address.council || '');
-        $("#Bes-ksadressepostnr").val(company.visitor_address.postcode || '');
+        $("#Firmanavn").val(company.name);
+        $("#Orgnr").val(company.companynumber);
+        if (company.visitor_address) {
+            $("#Bes-ksadresse").val(company.visitor_address.address || '');
+            $("#Bes-ksadressepoststed").val(company.visitor_address.city || '');
+            $("#Fylke").val(company.visitor_address.county || '');
+            $("#Kommune").val(company.visitor_address.council || '');
+            $("#Bes-ksadressepostnr").val(company.visitor_address.postcode || '');
+        }
+        if (company.postal_address) {
+            $("#Poststed").val(company.postal_address.city || '');
+            $("#Postnr").val(company.postal_address.postcode || '');
+        }
+        $("#Internett-domene").val(company.web || '');
+        $("#Antall-ansatte").val(company.employees || '');
+        if (company.main_industry_code) {
+            $("#Bransjebeskrivelse").val(company.main_industry_code.desc || '');
+            $("#Bransjekode").val(company.main_industry_code.nace_code || '');
+        }
+        if (company.latest_account && company.latest_account.earnings_before_taxes) {
+            $("#Resultat-f-r-skatt").val(company.latest_account.earnings_before_taxes);
+        }
     }
-
-    // Postal address details
-    if (company.postal_address) {
-        $("#Poststed").val(company.postal_address.city || '');
-        $("#Postnr").val(company.postal_address.postcode || '');
-    }
-
-    // Other details
-    $("#Internett-domene").val(company.web || '');
-    $("#Antall-ansatte").val(company.employees || '');
-
-    // Main industry details
-    if (company.main_industry_code) {
-        $("#Bransjebeskrivelse").val(company.main_industry_code.desc || '');
-        $("#Bransjekode").val(company.main_industry_code.nace_code || '');
-    }
-
-    // Earnings before taxes
-    if (company.latest_account && company.latest_account.earnings_before_taxes) {
-        $("#Resultat-f-r-skatt").val(company.latest_account.earnings_before_taxes);
-    }
-}
-
 });
-
-</script>

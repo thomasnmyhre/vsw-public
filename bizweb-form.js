@@ -1,3 +1,4 @@
+<script>
 $(document).ready(function() {
     // On input change in the 'Firmanavn' field
     $("#Firmanavn").on("input", async function() {
@@ -85,3 +86,4 @@ $(document).ready(function() {
         }
     }
 });
+</script>
